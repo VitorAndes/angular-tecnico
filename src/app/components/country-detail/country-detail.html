@@ -1,0 +1,81 @@
+<div class="page">
+  <header class="header">
+    <div class="container header-content">
+      <a [routerLink]="['/']" class="back-button"> ← Voltar </a>
+    </div>
+  </header>
+
+  <main class="container main">
+    <div class="grid">
+      <div class="image-card">
+        <img [src]="country.flags.svg" alt="Bandeira" class="flag-image" />
+      </div>
+
+      <div class="content">
+        <div class="title-section">
+          <h1>{{ country.name.common }}</h1>
+          <p class="native-name">{{ country.nativeName }}</p>
+          <p class="official-name">{{ country.name.official }}</p>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <strong>População</strong>
+            <span>{{ formatPopulation(country.population) }}</span>
+          </div>
+
+          <div class="info-item">
+            <strong>Região</strong>
+            <span>{{ country.region }} · {{ country.subregion }}</span>
+          </div>
+
+          <div class="info-item">
+            <strong>Capital</strong>
+            <span>{{ country.capital }}</span>
+          </div>
+
+          <div class="info-item">
+            <strong>Área</strong>
+            <span>{{ country.area.toLocaleString('pt-BR') }} km²</span>
+          </div>
+
+          <div class="info-item">
+            <strong>Idiomas</strong>
+            <span>{{ country.languages }}</span>
+          </div>
+
+          <div class="info-item">
+            <strong>Moedas</strong>
+            <span>{{ country.currencies }}</span>
+          </div>
+
+          <div class="info-item">
+            <strong>Fusos</strong>
+            <span>{{ country.timezones }}</span>
+          </div>
+        </div>
+
+        <div class="borders">
+          <p class="border-title">Fronteiras</p>
+
+          <div class="border-list">
+            <a routerLink="/" class="badge">
+              <img src="https://flagcdn.com/w40/ar.png" alt="" />
+              Argentina
+            </a>
+
+            <a routerLink="/" class="badge">
+              <img src="https://flagcdn.com/w40/uy.png" alt="" />
+              Uruguai
+            </a>
+
+            <a routerLink="/" class="badge">
+              <img src="https://flagcdn.com/w40/py.png" alt="" />
+              Paraguai
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

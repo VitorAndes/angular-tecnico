@@ -1,0 +1,41 @@
+.body {
+  height: 100vh;
+  background: #f8f9fb;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid #ddd;
+  z-index: 10;
+
+  .header_title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+}
+
+.container {
+  max-width: 1280px;
+  padding: 16px 24px;
+  margin: 0 auto;
+}
+
+.header-content {
+  padding: 16px 0;
+}
+
+.main {
+  margin: 0 auto;
+  max-width: 1280px;
+  padding: 16px 0px;
+}
+
+.country_cards {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 24px;
+}
