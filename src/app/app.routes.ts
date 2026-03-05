@@ -1,8 +1,10 @@
-import { Routes } from "@angular/router";
-import { CountryDetail } from "./components/country-detail/country-detail";
-import { Home } from "./components/home/home";
-
+import type { Routes } from "@angular/router";
 export const routes: Routes = [
-	{ path: "", component: Home },
-	{ path: "country/:code", component: CountryDetail },
+	{
+		path: "",
+		loadChildren: () =>
+			import("./features/countries/countries.routes").then(
+				(r) => r.COUNTRIES_ROUTES,
+			),
+	},
 ];

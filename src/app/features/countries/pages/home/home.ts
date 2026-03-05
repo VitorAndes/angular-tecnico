@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { CountryCard } from "../country-card/country-card";
-import { SearchAndFilter } from "../search-and-filter/search-and-filter";
+import { SearchAndFilter } from "../../../../shared/components/search-and-filter/search-and-filter";
+import { CountryCard } from "../../components/country-card/country-card";
 
 @Component({
 	selector: "app-home",
