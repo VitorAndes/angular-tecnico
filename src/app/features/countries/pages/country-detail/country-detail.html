@@ -7,76 +7,83 @@
   </header>
 
   <main class="container main">
-    <div class="grid">
-      <div class="image-card">
-        <img [src]="country.flags.svg" alt="Bandeira" class="flag-image" />
+    @if(ref.isLoading()){
+      <app-detail-skeleton></app-detail-skeleton>
+    }
+
+    @if (ref.value(); as data) {
+      <div class="grid">
+        <div class="image-card">
+          <img [src]="data.countryData.flags.svg" alt="Bandeira do {{data.countryData.name.common}}" class="flag-image" />
+        </div>
+
+        <div class="content">
+          <div class="title-section">
+            <h1>{{ data.countryData.name.common }}</h1>
+            <p class="official-name">{{ data.countryData.name.official }}</p>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-item">
+              <strong>População</strong>
+              <span>{{ formatPopulation(data.countryData.population) }}</span>
+            </div>
+
+            <div class="info-item">
+              <strong>Região</strong>
+              <span>{{ data.countryData.region }} · {{ data.countryData.subregion }}</span>
+            </div>
+
+            <div class="info-item">
+              <strong>Capital</strong>
+              <span>{{ data.countryData.capital }}</span>
+            </div>
+
+            <div class="info-item">
+              <strong>Área</strong>
+              <span>{{ data.countryData.area?.toLocaleString('pt-BR') }} km²</span>
+            </div>
+
+            <div class="info-item">
+              <strong>Idiomas</strong>
+              <span class="info-flex">
+                @for (lang of data.countryData.languages | keyvalue; track lang.key) {
+                <p>{{ lang.value }}</p>
+              }
+              </span>
+            </div>
+
+            <div class="info-item">
+              <strong>Moedas</strong>
+              @for(currency of data.countryData.currencies | keyvalue; track currency.key) {
+                <p>{{ currency.value.name }} ({{ currency.value.symbol }})</p>
+              }
+            </div>
+
+            <div class="info-item">
+              <strong>Fusos</strong>
+              <span>{{ data.countryData.timezones }}</span>
+            </div>
+          </div>
+
+          <div class="borders">
+            <p class="border-title">Fronteiras</p>
+
+            <div class="border-list">
+              @if(data.borders.length === 0){
+                <p>Nenhuma fronteira</p>
+              }
+              @for(border of data.borders; track border.cca3){
+                <a [routerLink]="['/country', border.cca3]" class="badge">
+                <img src="{{ border.flags.svg }}" alt="badeira do {{border.name.common}}" />
+                {{ border.name.common }}
+              </a>
+              
+              }
+            </div>
+          </div>
+        </div>
       </div>
-
-      <div class="content">
-        <div class="title-section">
-          <h1>{{ country.name.common }}</h1>
-          <p class="native-name">{{ country.nativeName }}</p>
-          <p class="official-name">{{ country.name.official }}</p>
-        </div>
-
-        <div class="info-grid">
-          <div class="info-item">
-            <strong>População</strong>
-            <span>{{ formatPopulation(country.population) }}</span>
-          </div>
-
-          <div class="info-item">
-            <strong>Região</strong>
-            <span>{{ country.region }} · {{ country.subregion }}</span>
-          </div>
-
-          <div class="info-item">
-            <strong>Capital</strong>
-            <span>{{ country.capital }}</span>
-          </div>
-
-          <div class="info-item">
-            <strong>Área</strong>
-            <span>{{ country.area.toLocaleString('pt-BR') }} km²</span>
-          </div>
-
-          <div class="info-item">
-            <strong>Idiomas</strong>
-            <span>{{ country.languages }}</span>
-          </div>
-
-          <div class="info-item">
-            <strong>Moedas</strong>
-            <span>{{ country.currencies }}</span>
-          </div>
-
-          <div class="info-item">
-            <strong>Fusos</strong>
-            <span>{{ country.timezones }}</span>
-          </div>
-        </div>
-
-        <div class="borders">
-          <p class="border-title">Fronteiras</p>
-
-          <div class="border-list">
-            <a routerLink="/" class="badge">
-              <img src="https://flagcdn.com/w40/ar.png" alt="" />
-              Argentina
-            </a>
-
-            <a routerLink="/" class="badge">
-              <img src="https://flagcdn.com/w40/uy.png" alt="" />
-              Uruguai
-            </a>
-
-            <a routerLink="/" class="badge">
-              <img src="https://flagcdn.com/w40/py.png" alt="" />
-              Paraguai
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
+    }
   </main>
 </div>

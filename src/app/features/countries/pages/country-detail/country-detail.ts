@@ -1,48 +1,55 @@
-import { Component, inject } from "@angular/core";
+import { KeyValuePipe } from "@angular/common";
+import { Component, inject, resource } from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, RouterModule } from "@angular/router";
+import { map } from "rxjs";
+import { DetailSkeleton } from "../../../../shared/components/detail-skeleton/detail-skeleton";
+import type { IBorderCountry, ICountry } from "../../models/countries.model";
 
 @Component({
 	selector: "app-country-detail",
-	imports: [RouterModule],
+	imports: [RouterModule, KeyValuePipe, DetailSkeleton],
 	templateUrl: "./country-detail.html",
 	styleUrl: "./country-detail.css",
 })
 export class CountryDetail {
 	private route = inject(ActivatedRoute);
-	countryName = this.route.snapshot.paramMap.get("code");
 
-	country = {
-		name: {
-			common: "Brasil",
-			official: "República Federativa do Brasil",
+	countryCode = toSignal(
+		this.route.paramMap.pipe(map((params) => params.get("code"))),
+	);
+
+	ref = resource({
+		params: () => this.countryCode(),
+
+		loader: async ({ params }) => {
+			if (!params) return null;
+
+			const [response] = await Promise.all([
+				fetch(
+					`https://restcountries.com/v3.1/alpha/${params}?fields=cca3,name,flags,population,region,subregion,capital,area,languages,currencies,timezones,borders`,
+				),
+
+				new Promise((r) => setTimeout(r, 800)),
+			]);
+
+			const countryData: ICountry = await response.json();
+
+			let borders: IBorderCountry[] = [];
+
+			if (countryData?.borders?.length) {
+				const bordersResponse = await fetch(
+					`https://restcountries.com/v3.1/alpha?codes=${countryData.borders.join(",")}&fields=cca3,name,flags`,
+				);
+
+				borders = await bordersResponse.json();
+			}
+			return {
+				countryData,
+				borders,
+			};
 		},
-		nativeName: "Brasil",
-		flags: {
-			svg: "https://flagcdn.com/br.svg",
-		},
-		population: 203062512,
-		region: "América do Sul",
-		subregion: "América do Sul",
-		capital: "Brasília",
-		area: 8515767,
-		languages: "Português",
-		currencies: "Real (BRL)",
-		timezones: "UTC−05:00, UTC−04:00, UTC−03:00",
-		borders: [
-			{
-				name: "Argentina",
-				flag: "https://flagcdn.com/w40/ar.png",
-			},
-			{
-				name: "Uruguai",
-				flag: "https://flagcdn.com/w40/uy.png",
-			},
-			{
-				name: "Paraguai",
-				flag: "https://flagcdn.com/w40/py.png",
-			},
-		],
-	};
+	});
 
 	formatPopulation(pop: number): string {
 		if (pop >= 1_000_000_000) return `${(pop / 1_000_000_000).toFixed(1)}B`;

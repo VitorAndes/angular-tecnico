@@ -1,9 +1,9 @@
-export interface Country {
+export interface ICountry {
 	cca3: string;
 	name: {
 		common: string;
 		official: string;
-		nativeName?: Record<string, { official: string; common: string }>;
+		nativeName?: { eng: { official: string } };
 	};
 	flags: { svg: string; png: string; alt?: string };
 	population: number;
@@ -18,4 +18,15 @@ export interface Country {
 	maps?: { googleMaps?: string };
 	continents?: string[];
 	tld?: string[];
+}
+
+export interface IBorderCountry {
+	cca3: string;
+	name: {
+		common: string;
+	};
+	flags: {
+		svg: string;
+		png: string;
+	};
 }

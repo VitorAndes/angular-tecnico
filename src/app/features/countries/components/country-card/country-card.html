@@ -1,16 +1,16 @@
-<a [routerLink]="['/country/32']"   class="country_card">
+<a [routerLink]="['/country/' + (country()?.cca3)]"   class="country_card">
   <div class="country_img">
     <img
-      src="https://media.gettyimages.com/id/1172159341/pt/vetorial/japanese-flag-with-tokyo.jpg?s=612x612&w=gi&k=20&c=96Gf0fA6qOAe-WlUroH99fGA1JlCba4DQu0X1NgCIjY="
+      src="{{country()?.flags?.svg}}"
       alt="img Country"
     />
   </div>
   <div class="country_info">
-    <h2 class="country_name">Japan</h2>
+    <h2 class="country_name">{{country()?.name?.common}}</h2>
     <div class="country_details">
-        <p><strong>Population:</strong> 126,476,461</p>
-        <p><strong>Region:</strong> Asia</p>
-        <p><strong>Capital:</strong> Tokyo</p>
+        <p><strong>População:</strong> {{formatPopulation(country()?.population!)}}</p>
+        <p><strong>Região:</strong> {{country()?.region}}</p>
+        <p><strong>Capital:</strong> {{country()?.capital?.[0] || 'N/A'}}</p>
     </div>
   </div>
 </a>
