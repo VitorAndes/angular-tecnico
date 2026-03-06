@@ -8,7 +8,7 @@
   <div class="country_info">
     <h2 class="country_name">{{country()?.name?.common}}</h2>
     <div class="country_details">
-        <p><strong>População:</strong> {{formatPopulation(country()?.population!)}}</p>
+        <p><strong>População:</strong> {{country()?.population ?? 0 | formatPopulation}}</p>
         <p><strong>Região:</strong> {{country()?.region}}</p>
         <p><strong>Capital:</strong> {{country()?.capital?.[0] || 'N/A'}}</p>
     </div>

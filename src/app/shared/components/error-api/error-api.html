@@ -1,0 +1,6 @@
+<div class="card_container" role="alert" aria-live="assertive">
+  <h2 class="error_message">
+    {{ `Oops! ${message}`   }}
+  </h2>
+  <button class="error_button" (click)="reload.emit()" type="button">Tentar novamente</button>
+</div>

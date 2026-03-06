@@ -1,33 +1,29 @@
-import { Component, computed, resource, signal } from "@angular/core";
+import { Component, computed, inject, resource, signal } from "@angular/core";
 import { CardSkeleton } from "../../../../shared/components/card-skeleton/card-skeleton";
+import { ErrorApi } from "../../../../shared/components/error-api/error-api";
 import { SearchAndFilter } from "../../../../shared/components/search-and-filter/search-and-filter";
 import { CountryCard } from "../../components/country-card/country-card";
 import type { ICountry } from "../../models/countries.model";
+import { CountryService } from "../../services/country-service";
 
 @Component({
 	selector: "app-home",
-	imports: [SearchAndFilter, CountryCard, CardSkeleton],
+	imports: [SearchAndFilter, CountryCard, CardSkeleton, ErrorApi],
 	templateUrl: "./home.html",
 	styleUrl: "./home.css",
 })
 export class Home {
-	countries = signal<ICountry[]>([]);
+	private countryService = inject(CountryService);
 
+	countries = signal<ICountry[]>([]);
 	search = signal("");
 	region = signal("");
 
 	ref = resource({
 		params: () => null,
 		loader: async () => {
-			const [response] = await Promise.all([
-				fetch(
-					"https://restcountries.com/v3.1/all?fields=cca3,name,flags,population,region,subregion,capital,area,languages,currencies",
-				),
-			]);
-
-			const data = await response.json();
+			const data = await this.countryService.getAllCountries();
 			this.countries.set(data);
-
 			return data;
 		},
 	});

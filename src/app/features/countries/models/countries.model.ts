@@ -15,9 +15,7 @@ export interface ICountry {
 	currencies?: Record<string, { name: string; symbol?: string }>;
 	timezones?: string[];
 	borders?: string[];
-	maps?: { googleMaps?: string };
-	continents?: string[];
-	tld?: string[];
+	maps?: { googleMaps?: string; openStreetMaps?: string };
 }
 
 export interface IBorderCountry {
@@ -28,5 +26,6 @@ export interface IBorderCountry {
 	flags: {
 		svg: string;
 		png: string;
+		alt: string;
 	};
 }
