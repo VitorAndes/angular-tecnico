@@ -7,6 +7,14 @@
 .grid {
   display: grid;
   gap: 40px;
+  width: 100%;
+}
+
+.image-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
 }
 
 @media (min-width: 768px) {
