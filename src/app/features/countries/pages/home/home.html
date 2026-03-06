@@ -6,10 +6,10 @@
   </header>
 
   <main class="container main">
-    <app-search-and-filter></app-search-and-filter>
+    <app-search-and-filter (filterChange)="handleFilter($event)"></app-search-and-filter>
     @if(!ref.isLoading()){
-      @if(ref.value().length > 0) {
-       <p>{{ ref.value().length }} países encontrados.</p>
+      @if(countries().length > 0) {
+       <p>{{ filteredCountries().length }} países encontrados.</p>
     } @else {
     <p>Nenhum país encontrado.</p>}
     }
@@ -25,8 +25,8 @@
 
       
 
-      @if (ref.value(); as countries) {
-        @for (country of countries; track $index) {
+      @if (countries(); as countries) {
+        @for (country of filteredCountries(); track $index) {
           <app-country-card [country]="country"></app-country-card>
         }
       }

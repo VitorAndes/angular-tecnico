@@ -29,8 +29,6 @@ export class CountryDetail {
 				fetch(
 					`https://restcountries.com/v3.1/alpha/${params}?fields=cca3,name,flags,population,region,subregion,capital,area,languages,currencies,timezones,borders`,
 				),
-
-				new Promise((r) => setTimeout(r, 800)),
 			]);
 
 			const countryData: ICountry = await response.json();
