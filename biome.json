@@ -16,7 +16,9 @@
 		"enabled": true,
 		"rules": {
 			"recommended": true,
-			"correctness": "off"
+			"correctness": "off",
+			"style": { "useImportType": "off" },
+			"complexity": { "useLiteralKeys": "off" }
 		}
 	},
 	"javascript": {

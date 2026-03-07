@@ -1,16 +1,18 @@
-<a [routerLink]="['/country/' + (country()?.cca3)]"   class="country_card">
+<a [routerLink]="['/country/' + country()?.cca3]" class="country_card">
   <div class="country_img">
     <img
-      src="{{country()?.flags?.svg}}"
-      alt="img Country"
+      src="{{ country()?.flags?.svg }}"
+      alt="{{ country()?.flags?.alt }} "
+      loading="lazy"
+      decoding="async"
     />
   </div>
   <div class="country_info">
-    <h2 class="country_name">{{country()?.name?.common}}</h2>
+    <h2 class="country_name">{{ country()?.name?.common }}</h2>
     <div class="country_details">
-        <p><strong>População:</strong> {{country()?.population ?? 0 | formatPopulation}}</p>
-        <p><strong>Região:</strong> {{country()?.region}}</p>
-        <p><strong>Capital:</strong> {{country()?.capital?.[0] || 'N/A'}}</p>
+      <p><strong>População:</strong> {{ country()?.population ?? 0 | formatPopulation }}</p>
+      <p><strong>Região:</strong> {{ country()?.region }}</p>
+      <p><strong>Capital:</strong> {{ country()?.capital?.[0] || 'N/A' }}</p>
     </div>
   </div>
 </a>

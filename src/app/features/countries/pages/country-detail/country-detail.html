@@ -9,9 +9,13 @@
   <main class="container main">
     @if (ref.isLoading()) {
       <app-detail-skeleton></app-detail-skeleton>
-    } @else if(ref.error()){
-      <app-error-api message="Ocorreu um erro inesperado ao listar os detalhes do País." (reload)="ref.reload()"  ></app-error-api>
-    } @else if(ref.value(); as data){<div class="grid">
+    } @else if (ref.error()) {
+      <app-error-api
+        message="Ocorreu um erro inesperado ao listar os detalhes do País."
+        (reload)="ref.reload()"
+      ></app-error-api>
+    } @else if (ref.value(); as data) {
+      <div class="grid">
         <div class="image-card">
           <img
             [src]="data.countryData.flags.svg"
@@ -39,7 +43,9 @@
 
             <div class="info-item">
               <strong>Capital</strong>
-              <span>{{ data.countryData.capital }}</span>
+              <span>{{
+                !data.countryData.capital?.[0] ? 'Sem Capital' : data.countryData.capital?.[0]
+              }}</span>
             </div>
 
             <div class="info-item">
@@ -58,9 +64,18 @@
 
             <div class="info-item">
               <strong>Moedas</strong>
-              @for (currency of data.countryData.currencies | keyvalue; track currency.key) {
-                <span>{{ currency.value.name }} ({{ currency.value.symbol }})</span>
+
+              @if (
+                !data.countryData.currencies ||
+                (data.countryData.currencies | keyvalue).length === 0
+              ) {
+                <span>Nenhuma moeda</span>
+              } @else {
+                @for (currency of data.countryData.currencies | keyvalue; track currency.key) {
+                  <span>{{ currency.value.name }} ({{ currency.value.symbol ?? '-' }})</span>
+                }
               }
+              
             </div>
 
             <div class="info-item">
@@ -69,20 +84,22 @@
             </div>
             <div class="info-item">
               <strong>Maps</strong>
-              <span><a
-                [href]="data.countryData.maps?.googleMaps"
-                target="_blank"
-                rel="noopener noreferrer"
+              <span
+                ><a
+                  [href]="data.countryData.maps?.googleMaps"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Google Maps
+                </a>
+                <a
+                  [href]="data.countryData.maps?.openStreetMaps"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  openStreetMaps
+                </a></span
               >
-                Google Maps
-              </a>
-              <a
-                [href]="data.countryData.maps?.openStreetMaps"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                openStreetMaps
-              </a></span>
             </div>
           </div>
 
@@ -102,7 +119,7 @@
             </div>
           </div>
         </div>
-      </div>}
-
+      </div>
+    }
   </main>
 </div>

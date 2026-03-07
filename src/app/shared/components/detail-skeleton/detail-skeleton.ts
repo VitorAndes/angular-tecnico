@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'app-detail-skeleton',
-  imports: [],
-  templateUrl: './detail-skeleton.html',
-  styleUrl: './detail-skeleton.css',
+	selector: "app-detail-skeleton",
+	imports: [],
+	templateUrl: "./detail-skeleton.html",
+	styleUrl: "./detail-skeleton.css",
 })
 export class DetailSkeleton {}

@@ -1,51 +1,68 @@
-import { Injectable } from "@angular/core";
-import type { IBorderCountry, ICountry } from "../models/countries.model";
+import { HttpClient } from "@angular/common/http";
+import { Injectable, inject } from "@angular/core";
+import { Observable, of } from "rxjs";
+import { map, shareReplay, switchMap } from "rxjs/operators";
+import { IBorderCountry, ICountry } from "../models/countries.model";
 
 @Injectable({
 	providedIn: "root",
 })
 export class CountryService {
 	private BASE_URL = "https://restcountries.com/v3.1";
+	private http = inject(HttpClient);
 
-	async getAllCountries() {
-		const response = await fetch(
-			`${this.BASE_URL}/all?fields=cca3,name,flags,population,region,capital`,
-		);
+	private countries$?: Observable<ICountry[]>;
 
-		if (!response.ok) {
-			throw new Error("Erro ao carregar os países, por favor tente novamente.");
+	private countryCache = new Map<
+		string,
+		Observable<{ countryData: ICountry; borders: IBorderCountry[] }>
+	>();
+
+	getAllCountries(): Observable<ICountry[]> {
+		if (!this.countries$) {
+			this.countries$ = this.http
+				.get<ICountry[]>(
+					`${this.BASE_URL}/all?fields=cca3,name,flags,population,region,capital`,
+				)
+				.pipe(shareReplay(1));
 		}
 
-		const data = await response.json();
-
-		return data;
+		return this.countries$;
 	}
 
-	async getCountryDetail(
+	getCountryDetail(
 		code: string,
-	): Promise<{ countryData: ICountry; borders: IBorderCountry[] }> {
-		const response = await fetch(
-			`${this.BASE_URL}/alpha/${code}?fields=cca3,name,flags,population,region,subregion,capital,area,languages,currencies,timezones,borders,maps`,
-		);
-
-		if (!response.ok) {
-			throw new Error(
-				"Erro ao carregar os detalhes do país, por favor tente novamente.",
-			);
+	): Observable<{ countryData: ICountry; borders: IBorderCountry[] }> {
+		if (this.countryCache.has(code)) {
+			return this.countryCache.get(code)!;
 		}
 
-		const countryData: ICountry = await response.json();
+		const request$ = this.http
+			.get<ICountry>(
+				`${this.BASE_URL}/alpha/${code}?fields=cca3,name,flags,population,region,subregion,capital,area,languages,currencies,timezones,borders,maps`,
+			)
+			.pipe(
+				switchMap((countryData) => {
+					const borders$ = countryData?.borders?.length
+						? this.http.get<IBorderCountry[]>(
+								`${this.BASE_URL}/alpha?codes=${countryData.borders.join(
+									",",
+								)}&fields=cca3,name,flags`,
+							)
+						: of([]);
 
-		let borders: IBorderCountry[] = [];
-
-		if (countryData?.borders?.length) {
-			const bordersResponse = await fetch(
-				`${this.BASE_URL}/alpha?codes=${countryData.borders.join(",")}&fields=cca3,name,flags`,
+					return borders$.pipe(
+						map((borders) => ({
+							countryData,
+							borders,
+						})),
+					);
+				}),
+				shareReplay(1),
 			);
 
-			borders = await bordersResponse.json();
-		}
+		this.countryCache.set(code, request$);
 
-		return { countryData, borders };
+		return request$;
 	}
 }

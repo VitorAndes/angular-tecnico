@@ -8,29 +8,29 @@
   <main class="container main">
     <app-search-and-filter (filterChange)="handleFilter($event)"></app-search-and-filter>
 
-    @if(!ref.isLoading()
-       && !ref.error()
-       && (!filteredCountries() || filteredCountries().length === 0)) {
-        <p>Nenhum País encontrado.</p>
-      } @else {
-        <p>Exibindo {{filteredCountries().length}} Países.</p>
-      }
+    @if (
+      !ref.isLoading() && !ref.error() && (!filteredCountries() || filteredCountries().length === 0)
+    ) {
+      <p>Nenhum País encontrado.</p>
+    } @else {
+      <p>Exibindo {{ filteredCountries().length }} Países.</p>
+    }
 
     <div class="country_cards">
-
-      
-      
-        @if (ref.isLoading()) {
-          @for (item of [1, 2, 3, 4, 5, 6,7,8,9,10,11,12]; track item) {
-            <app-card-skeleton></app-card-skeleton>
-          }
-        } @else if(ref.error()){
-          <app-error-api message="Ocorreu um erro inesperado ao listar todos os Países" (reload)="ref.reload()"  ></app-error-api>
-        } @else if(countries(); as countries){
-@for (country of filteredCountries(); track $index) {
+      @if (ref.isLoading()) {
+        @for (item of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track item) {
+          <app-card-skeleton></app-card-skeleton>
+        }
+      } @else if (ref.error()) {
+        <app-error-api
+          message="Ocorreu um erro inesperado ao listar todos os Países"
+          (reload)="ref.reload()"
+        ></app-error-api>
+      } @else if (ref.value(); as countries) {
+        @for (country of filteredCountries(); track $index) {
           <app-country-card [country]="country"></app-country-card>
         }
-        }
+      }
     </div>
   </main>
 </div>
